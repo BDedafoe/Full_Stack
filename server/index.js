@@ -10,7 +10,10 @@ import morgan from'morgan';
 import dotenv from 'dotenv';
 import userRoutes from './routes/users.js';
 import authRoutes from './routes/auth.js';
+import messageRoutes from './routes/messages.js';
 import { register } from "./controllers/auth.js";
+import { createMessage } from "./controllers/messages.js";
+import { verifyToken } from "./middleware/auth.js";
 
 dotenv.config();
 
@@ -21,7 +24,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(morgan('common'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 app.use("/images", express.static(path.join(__dirname, "public/images")));
@@ -49,9 +52,11 @@ const storage = multer.diskStorage({
 
   //controllers//
 app.post("/auth/register", upload.single("picture"), register);
+app.post("/messages", verifyToken, upload.single("picture"), createMessage);
   //routes//
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/messages", messageRoutes)
 
 const PORT = process.env.PORT || 5000;
 mongoose
