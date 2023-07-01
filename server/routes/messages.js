@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/", verifyToken, getMessages);
 router.get("/:userId/messages", verifyToken, getUserMessages);
-router.post("/", verifyToken, createMessage);
 router.delete("/:id", verifyToken, deleteMessage);
 router.put("/:id", verifyToken, updateMessage);
 

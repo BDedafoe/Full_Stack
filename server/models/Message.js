@@ -20,10 +20,7 @@ const MessageSchema = new mongoose.Schema(
       max: 50,
       unique: true,
     },
-    description: {
-        type: String,
-        required: true,
-    },
+    description: String,
     subject: String,
     picture: String,
     userPicture: String,
